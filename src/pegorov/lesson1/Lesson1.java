@@ -31,8 +31,8 @@ public class Lesson1 {
         ap.showBox();
     }
 
-    public static void metod1(Object[] obj, int i, int j) {
-        Object sw = obj[i];
+    public static <T> void metod1(T[] obj, int i, int j) {
+        T sw = obj[i];
         obj[i] = obj[j];
         obj[j] = sw;
 
