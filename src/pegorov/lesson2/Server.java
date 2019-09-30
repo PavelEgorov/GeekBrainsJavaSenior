@@ -3,6 +3,7 @@ package pegorov.lesson2;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 public class Server {
@@ -26,7 +27,7 @@ public class Server {
         return isRunnable;
     }
 
-    public void startServer() throws IOException {
+    public void startServer() throws IOException, SQLException {
         srv = new ServerSocket(this.PORT);
         this.sql = new SQL();
         this.isRunnable = true;
@@ -58,9 +59,17 @@ public class Server {
         return false;
     }
 
-    public boolean addClient(String name, ChatThread cTh){
+    public boolean addClient(String name, ChatThread cTh) throws SQLException, IOException {
         if (!listClient.containsKey(name)) {
             listClient.put(name, cTh);
+
+            if (!sql.findName(name)){
+                sql.addUser(name);
+                sendNeedPwd(cTh, true);
+            }else{
+                sendNeedPwd(cTh, false);
+                System.out.println("Клиент уже есть в SQL базе! " + name);
+            }
 
             System.out.println("В чате новый клиент! " + name);
             return true;
@@ -69,6 +78,14 @@ public class Server {
         System.out.println("Клиент попытался подключиться под уже заведенным ником! " + name);
 
         return false;
+    }
+
+    private void sendNeedPwd(ChatThread cTh, boolean newPwd) throws IOException {
+        if (newPwd) {
+            cTh.sendMessage("Установите пароль:");
+        } else {
+            cTh.sendMessage("Введите пароль:");
+        }
     }
 
     public void stopServer() throws IOException {
@@ -121,6 +138,54 @@ public class Server {
             clientIn.sendMessage("[" + nameIn + " -> " + nameOut + "]: " + str);
             clientOut.sendMessage("[" + nameIn + " -> " + nameOut + "]: " + str);
             System.out.println("Отправлено приватное сообщение: [" + nameIn + " -> " + nameOut + "] " + str);
+        }
+    }
+
+    public boolean isPwdCorrect(String name, String str) {
+        return sql.pwdIsCorrect(name, str);
+    }
+
+    public void changePWD(String s, String name) {
+        try {
+            sql.changePWD(s, name);
+
+            ChatThread clientIn = listClient.get(name);
+            clientIn.sendMessage("Пароль успешно изменен!");
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+
+            ChatThread clientIn = listClient.get(name);
+            try {
+                clientIn.sendMessage("При смене пароля возникла ошибка!");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public void changeName(String s, String name) {
+        try {
+            ChatThread clientIn = listClient.get(name);
+
+            if (sql.findName(s)){
+                clientIn.sendMessage("Имя уже занято!");
+
+                return;
+            }
+
+            sql.changeName(s, name);
+
+            clientIn.setName(s);
+            clientIn.sendMessage("Имя успешно изменено!");
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+
+            ChatThread clientIn = listClient.get(name);
+            try {
+                clientIn.sendMessage("При смене имени возникла ошибка!");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 }

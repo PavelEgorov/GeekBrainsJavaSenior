@@ -56,6 +56,8 @@ public class ChatInterface extends JFrame {
 
         updateDialog("Чтобы выйти из чата введите: /end");
         updateDialog("Чтобы написать приватное сообщение введите: /w имя сообщение");
+        updateDialog("Чтобы установить/изменить пароль введите: /setpassword пароль");
+        updateDialog("Чтобы изменить имя: /setname имя");
         updateDialog("У вас есть 120сек на ввод имени!");
         updateDialog("Введите свое имя:");
         setVisible(true);

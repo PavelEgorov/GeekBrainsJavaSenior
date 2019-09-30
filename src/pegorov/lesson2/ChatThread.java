@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.Thread.sleep;
@@ -13,6 +14,7 @@ public class ChatThread {
     private Server server;
     private DataInputStream in;
     private DataOutputStream out;
+
     private String name;
     private boolean haveName;
 
@@ -45,6 +47,8 @@ public class ChatThread {
                 haveName = authentication();
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         });
 
@@ -67,7 +71,7 @@ public class ChatThread {
         closeConnection();
     }
 
-    private boolean authentication() throws IOException {
+    private boolean authentication() throws IOException, SQLException {
         String str = in.readUTF();
 
         if (str.equalsIgnoreCase("/end")) {
@@ -80,6 +84,10 @@ public class ChatThread {
 
         String msg = "";
         if (server.addClient(name, this)) {
+            do{
+                str = in.readUTF();
+            }while (!server.isPwdCorrect(name, str));
+
             msg = "Добро пожаловать в чат! " + name;
             server.sendAll(msg);
 
@@ -125,6 +133,16 @@ public class ChatThread {
             if (msg[0].equalsIgnoreCase("/w")) {
                 String nameOut = msg[1];
                 server.sendPrivateMsg(msg[2], name, nameOut);
+            }else if(msg[0].equalsIgnoreCase("/setpassword")){
+                System.out.println("Поступила команды смены пароля!");
+
+                String pwd = msg[1];
+                server.changePWD(pwd, name);
+            }else if(msg[0].equalsIgnoreCase("/setname")){
+                System.out.println("Поступила команды смены имени!");
+
+                String pwd = msg[1];
+                server.changeName(pwd, name);
             } else {
                 server.sendAll(this.name, str);
             }
@@ -168,5 +186,9 @@ public class ChatThread {
 
         System.out.println("Отправлено сообщение клиенту: " + this.name + " " + msg);
 
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
