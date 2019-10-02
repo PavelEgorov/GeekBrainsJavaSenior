@@ -2,6 +2,9 @@ package pegorov.lesson2;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.IOException;
 
 public class ChatInterface extends JFrame {
     private int width = 500;
@@ -15,8 +18,12 @@ public class ChatInterface extends JFrame {
         this.client = cl;
 
         setTitle("Chat");
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setBounds(150,150, width, sizeY);
+        setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+
+        ChatWindowListener chatWindowListener = new ChatWindowListener();
+        this.addWindowListener(chatWindowListener);
+
+        setBounds(150, 150, width, sizeY);
 
         setLayout(new BorderLayout());
 
@@ -72,7 +79,56 @@ public class ChatInterface extends JFrame {
         textField.setText("");
     }
 
-    public void updateDialog(String msg){
+    public void updateDialog(String msg) {
         dialogField.append("\n" + msg);
+    }
+
+    public void clear() {
+        dialogField.setText("");
+    }
+
+    public class ChatWindowListener implements WindowListener {
+
+        @Override
+        public void windowOpened(WindowEvent e) {
+
+        }
+
+        @Override
+        public void windowClosing(WindowEvent e) {
+            client.sendMessage("/end");
+            client.safeChat(dialogField.getText());
+
+            /*try {
+                client.closeConnection();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }*/
+        }
+
+        @Override
+        public void windowClosed(WindowEvent e) {
+
+        }
+
+        @Override
+        public void windowIconified(WindowEvent e) {
+
+        }
+
+        @Override
+        public void windowDeiconified(WindowEvent e) {
+
+        }
+
+        @Override
+        public void windowActivated(WindowEvent e) {
+
+        }
+
+        @Override
+        public void windowDeactivated(WindowEvent e) {
+
+        }
     }
 }

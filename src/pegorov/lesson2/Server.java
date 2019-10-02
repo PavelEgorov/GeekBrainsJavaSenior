@@ -177,6 +177,7 @@ public class Server {
 
             clientIn.setName(s);
             clientIn.sendMessage("Имя успешно изменено!");
+            clientIn.sendMessageName(false);
         } catch (SQLException | IOException e) {
             e.printStackTrace();
 

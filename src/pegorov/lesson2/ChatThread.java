@@ -75,6 +75,7 @@ public class ChatThread {
         String str = in.readUTF();
 
         if (str.equalsIgnoreCase("/end")) {
+            sendMessage("/end");
             System.out.println("Клиент отключился на этапе аутентификации");
 
             return false;
@@ -89,6 +90,9 @@ public class ChatThread {
             }while (!server.isPwdCorrect(name, str));
 
             msg = "Добро пожаловать в чат! " + name;
+
+            sendMessageName(true);
+
             server.sendAll(msg);
 
             System.out.println("Клиент добавлен в список. Имя нового клиента: " + name);
@@ -101,6 +105,14 @@ public class ChatThread {
             System.out.println("Клиент не добавлен в список. Имя нового клиента: " + name + " сообщение: " + msg);
 
             return false;
+        }
+    }
+
+    public void sendMessageName(boolean t) throws IOException {
+        if (t){
+            sendMessage("/name " + name);
+        }else{
+            sendMessage("/changename " + name);
         }
     }
 
