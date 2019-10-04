@@ -18,8 +18,14 @@ public class Client {
     private static boolean isRunning;
     private ChatInterface clientInterface;
 
+    private ChatFileWork file;
+    private String name;
+    private String newName;
+
     public void startClient(ChatInterface inr) {
         this.clientInterface = inr;
+        this.name = "";
+        this.newName = "";
 
         try {
             connectToServer(inr);
@@ -30,7 +36,7 @@ public class Client {
         }
     }
 
-    private static void connectToServer(ChatInterface inr) throws IOException {
+    private void connectToServer(ChatInterface inr) throws IOException {
 
         socket = new Socket(SERVER_ADDR, SERVER_PORT);
         in = new DataInputStream(socket.getInputStream());
@@ -55,8 +61,25 @@ public class Client {
                         break;
                     }
 
-                    inr.updateDialog(strFromServer);
-                    System.out.println(strFromServer);
+                    String[] msg = strFromServer.split(" ");
+                    if (msg[0].equalsIgnoreCase("/name")) {
+                        System.out.println("Сервер прислал наше имя: " + msg[1]);
+
+                        name = msg[1];
+                        file = new ChatFileWork(name);
+
+                        clientInterface.clear();
+
+                        inr.updateDialog(this.loadChat());
+                    }else if (msg[0].equalsIgnoreCase("/changename")) {
+                        System.out.println("Сервер прислал наше новое имя: " + msg[1]);
+
+                        newName = msg[1];
+                    }else {
+
+                        inr.updateDialog(strFromServer);
+                        System.out.println(strFromServer);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -97,7 +120,7 @@ public class Client {
         }
     }
 
-    public static void closeConnection() throws IOException {
+    public void closeConnection() throws IOException {
         isRunning = false;
 
         in.close();
@@ -106,6 +129,8 @@ public class Client {
         if (!socket.isClosed()) {
             socket.close();
         }
+
+        file.close();
     }
 
     public void sendMessage(String text) {
@@ -135,5 +160,22 @@ public class Client {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void safeChat(String toString) {
+        try {
+            file.safeFile(toString, newName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String loadChat(){
+        try {
+            return file.loadFile100(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }
