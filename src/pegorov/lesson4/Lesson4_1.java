@@ -1,6 +1,6 @@
 package pegorov.lesson4;
 
-public class Lesson4 {
+public class Lesson4_1 {
 
     static Object lock = new Object();
     static volatile char c = 'A';
@@ -39,6 +39,6 @@ public class Lesson4 {
         new Thread(new Run('A', 'B', 5)).start();
         new Thread(new Run('B', 'C', 5)).start();
         new Thread(new Run('C', 'A', 5)).start();
-        
+
     }
 }
