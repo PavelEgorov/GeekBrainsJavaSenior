@@ -7,15 +7,17 @@ public class Lesson4_2 {
     public static class Run implements Runnable {
         private char currentSymbol;
         private String world;
-
+        private int countInWord;
+       
         public Run(char currentSymbol, String word) {
             this.world = word;
             this.currentSymbol = currentSymbol;
+            this.countInWord = world.length() - world.replace(""+currentSymbol, "").length();
         }
 
         @Override
         public void run() {
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 5*countInWord; i++) {
                 synchronized (lock) {
                     try {
                         while (this.world.charAt(position) != currentSymbol)
