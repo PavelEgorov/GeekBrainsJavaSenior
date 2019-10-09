@@ -8,7 +8,11 @@ public class Lesson4_2 {
         private char currentSymbol;
         private String world;
         private int countInWord;
+<<<<<<< HEAD
 
+=======
+       
+>>>>>>> origin/master
         public Run(char currentSymbol, String word) {
             this.world = word;
             this.currentSymbol = currentSymbol;
