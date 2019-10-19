@@ -30,10 +30,10 @@ public class ChatThread {
           /*
          Первым делом нужно спросить кто к нам подключается.
          */
-        System.out.println("Клиент подключился требуется аутентификация");
+        server.sendlogInfo("Клиент подключился требуется аутентификация");
         Thread thread = new Thread(() -> {
             try {
-                System.out.println("Создаем поток чтения сообщений от клиента: " + name);
+                server.sendlogInfo("Создаем поток чтения сообщений от клиента: " + name);
 
                 readMessage();
             } catch (IOException e) {
@@ -76,7 +76,7 @@ public class ChatThread {
 
         if (str.equalsIgnoreCase("/end")) {
             sendMessage("/end");
-            System.out.println("Клиент отключился на этапе аутентификации");
+            server.sendlogInfo("Клиент отключился на этапе аутентификации");
 
             return false;
         }
@@ -95,14 +95,14 @@ public class ChatThread {
 
             server.sendAll(msg);
 
-            System.out.println("Клиент добавлен в список. Имя нового клиента: " + name);
+            server.sendlogInfo("Клиент добавлен в список. Имя нового клиента: " + name);
 
             return true;
         } else {
             msg = "Клиент уже есть в чате, введите новый ник.";
 
             out.writeUTF(msg);
-            System.out.println("Клиент не добавлен в список. Имя нового клиента: " + name + " сообщение: " + msg);
+            server.sendlogInfo("Клиент не добавлен в список. Имя нового клиента: " + name + " сообщение: " + msg);
 
             return false;
         }
@@ -120,14 +120,14 @@ public class ChatThread {
 
         while (server.isRunning()) {
             if (!socket.isConnected()) {
-                System.out.println("Клиент: " + this.name + " отключился");
+                server.sendlogInfo("Клиент: " + this.name + " отключился");
                 closeConnection();
                 break;
             }
 
             String str = in.readUTF();
 
-            System.out.println("Клиент: " + name + " написал сообщение: " + str);
+            server.sendlogInfo("Клиент: " + name + " написал сообщение: " + str);
 
             if (str.equalsIgnoreCase("/end")) {
                 closeConnection();
@@ -135,7 +135,7 @@ public class ChatThread {
             }
 
             if (str.equalsIgnoreCase("/stopServer")) {
-                System.out.println("Поступила команды выключения сервера!");
+                server.sendlogInfo("Поступила команды выключения сервера!");
 
                 server.stopServer();
                 break;
@@ -146,12 +146,12 @@ public class ChatThread {
                 String nameOut = msg[1];
                 server.sendPrivateMsg(msg[2], name, nameOut);
             }else if(msg[0].equalsIgnoreCase("/setpassword")){
-                System.out.println("Поступила команды смены пароля!");
+                server.sendlogInfo("Поступила команды смены пароля!");
 
                 String pwd = msg[1];
                 server.changePWD(pwd, name);
             }else if(msg[0].equalsIgnoreCase("/setname")){
-                System.out.println("Поступила команды смены имени!");
+                server.sendlogInfo("Поступила команды смены имени!");
 
                 String pwd = msg[1];
                 server.changeName(pwd, name);
@@ -181,7 +181,7 @@ public class ChatThread {
             sendMessage("/end");
 
             stopSocket();
-            System.out.println(this.name + " отключился");
+            server.sendlogInfo(this.name + " отключился");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -196,7 +196,7 @@ public class ChatThread {
         out.writeUTF(msg);
         out.flush();
 
-        System.out.println("Отправлено сообщение клиенту: " + this.name + " " + msg);
+        server.sendlogInfo("Отправлено сообщение клиенту: " + this.name + " " + msg);
 
     }
 
