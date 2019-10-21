@@ -1,10 +1,17 @@
 package pegorov.lesson2;
 
+import sun.applet.Main;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Server {
     private int PORT;
@@ -12,8 +19,16 @@ public class Server {
     private ServerSocket srv;
     private HashMap<String, ChatThread> listClient;
     private SQL sql;
+    private Logger logger;
 
     public Server() {
+        this.logger = Logger.getLogger(Main.class.getName());
+        try {
+            this.logger.addHandler(new FileHandler("log.txt"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         this.PORT = 8181;
         this.listClient = new HashMap<String, ChatThread>();
     }
@@ -32,7 +47,7 @@ public class Server {
         this.sql = new SQL();
         this.isRunnable = true;
 
-        System.out.println("Сервер запущен, ожидаем подключения...");
+        sendlogInfo("Сервер запущен, ожидаем подключения...");
 
         while (isRunning()) {
             Socket socket = srv.accept();
@@ -43,19 +58,19 @@ public class Server {
 
     public boolean closeClient(String name) {
         if (name == null){
-            System.out.println("Клиент не успел авторизоватья! ");
+            sendlogInfo("Клиент не успел авторизоватья! ");
 
             return true;
         }
         if (!listClient.isEmpty()) {
             listClient.remove(name);
 
-            System.out.println("Клиент удален из чата! " + name);
+            sendlogInfo("Клиент удален из чата! " + name);
 
             return true;
         }
 
-        System.out.println("Клиента уже нет в чате! " + name);
+        sendlogInfo("Клиента уже нет в чате! " + name);
         return false;
     }
 
@@ -68,14 +83,17 @@ public class Server {
                 sendNeedPwd(cTh, true);
             }else{
                 sendNeedPwd(cTh, false);
-                System.out.println("Клиент уже есть в SQL базе! " + name);
+                sendlogInfo("Клиент уже есть в SQL базе! " + name);
+                //System.out.println("Клиент уже есть в SQL базе! " + name);
             }
 
-            System.out.println("В чате новый клиент! " + name);
+            sendlogInfo("В чате новый клиент! " + name);
+            //System.out.println("В чате новый клиент! " + name);
             return true;
         }
 
-        System.out.println("Клиент попытался подключиться под уже заведенным ником! " + name);
+        sendlogInfo("Клиент попытался подключиться под уже заведенным ником! " + name);
+        //System.out.println("Клиент попытался подключиться под уже заведенным ником! " + name);
 
         return false;
     }
@@ -96,7 +114,8 @@ public class Server {
                 ChatThread map = listClient.get(name);
                 map.closeConnection();
 
-                System.out.println("Клиент: " + name + " был отключен сервером.");
+                sendlogInfo("Клиент: " + name + " был отключен сервером.");
+                //System.out.println("Клиент: " + name + " был отключен сервером.");
             }
             listClient.clear();
         }
@@ -106,7 +125,8 @@ public class Server {
         }
 
         sql.Stop();
-        System.out.println("Сервер остановлен");
+        sendlogInfo("Сервер остановлен");
+        //System.out.println("Сервер остановлен");
     }
 
     public void sendAll(String nameClient, String msg) throws IOException {
@@ -122,7 +142,8 @@ public class Server {
             for (ChatThread map : listClient.values()) {
                 map.sendMessage(msg);
 
-                System.out.println("Сообщение сервера: " + msg);
+                sendlogInfo("Сообщение сервера: " + msg);
+                //System.out.println("Сообщение сервера: " + msg);
             }
         }
     }
@@ -133,11 +154,13 @@ public class Server {
 
         if (clientOut == null){
             clientIn.sendMessage("Сообщение сервера: нет такого пользователя [" + nameOut + "]");
-            System.out.println("Нет такого клиента! " + nameOut);
+            sendlogWarning("Нет такого клиента! " + nameOut);
+            //System.out.println("Нет такого клиента! " + nameOut);
         }else{
             clientIn.sendMessage("[" + nameIn + " -> " + nameOut + "]: " + str);
             clientOut.sendMessage("[" + nameIn + " -> " + nameOut + "]: " + str);
-            System.out.println("Отправлено приватное сообщение: [" + nameIn + " -> " + nameOut + "] " + str);
+            sendlogInfo( "Отправлено приватное сообщение: [" + nameIn + " -> " + nameOut + "] " + str);
+            //System.out.println("Отправлено приватное сообщение: [" + nameIn + " -> " + nameOut + "] " + str);
         }
     }
 
@@ -151,14 +174,18 @@ public class Server {
 
             ChatThread clientIn = listClient.get(name);
             clientIn.sendMessage("Пароль успешно изменен!");
+            sendlogInfo("Пароль успешно изменен! " + name);
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            sendlogError(String.valueOf(e));
+            //e.printStackTrace();
 
             ChatThread clientIn = listClient.get(name);
             try {
                 clientIn.sendMessage("При смене пароля возникла ошибка!");
+                sendlogInfo("При смене пароля возникла ошибка! " + name);
             } catch (IOException ex) {
-                ex.printStackTrace();
+                sendlogError(String.valueOf(ex));
+                //ex.printStackTrace();
             }
         }
     }
@@ -169,7 +196,7 @@ public class Server {
 
             if (sql.findName(s)){
                 clientIn.sendMessage("Имя уже занято!");
-
+                sendlogWarning("Имя уже занято! " + name);
                 return;
             }
 
@@ -178,15 +205,33 @@ public class Server {
             clientIn.setName(s);
             clientIn.sendMessage("Имя успешно изменено!");
             clientIn.sendMessageName(false);
+            sendlogInfo("Имя успешно изменено!" + name);
+
         } catch (SQLException | IOException e) {
-            e.printStackTrace();
+            sendlogError( String.valueOf(e));
+            //e.printStackTrace();
 
             ChatThread clientIn = listClient.get(name);
             try {
                 clientIn.sendMessage("При смене имени возникла ошибка!");
+                sendlogError("При смене имени возникла ошибка!" + name);
+
             } catch (IOException ex) {
-                ex.printStackTrace();
+                sendlogError( String.valueOf(ex));
+                //ex.printStackTrace();
             }
         }
+    }
+
+    public void sendlogInfo(String msg){
+        logger.log(Level.INFO, msg);
+    }
+
+    public void sendlogWarning(String msg){
+        logger.log(Level.WARNING, msg);
+    }
+
+    public void sendlogError(String msg){
+        logger.log(Level.SEVERE, msg);
     }
 }
