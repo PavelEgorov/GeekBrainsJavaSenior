@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2019-10-19T18:12:49</date>
+  <millis>1571497969689</millis>
+  <sequence>0</sequence>
+  <logger>sun.applet.Main</logger>
+  <level>INFO</level>
+  <class>pegorov.lesson2.Server</class>
+  <method>sendlogInfo</method>
+  <thread>1</thread>
+  <message>Сервер запущен, ожидаем подключения...</message>
+</record>
+<record>
+  <date>2019-10-19T18:12:54</date>
+  <millis>1571497974120</millis>
+  <sequence>1</sequence>
+  <logger>sun.applet.Main</logger>
+  <level>INFO</level>
+  <class>pegorov.lesson2.Server</class>
+  <method>sendlogInfo</method>
+  <thread>1</thread>
+  <message>Клиент подключился требуется аутентификация</message>
+</record>
+<record>
+  <date>2019-10-19T18:12:56</date>
+  <millis>1571497976928</millis>
+  <sequence>2</sequence>
+  <logger>sun.applet.Main</logger>
+  <level>INFO</level>
+  <class>pegorov.lesson2.Server</class>
+  <method>sendlogInfo</method>
+  <thread>13</thread>
+  <message>Отправлено сообщение клиенту: Pp Введите пароль:</message>
+</record>
+<record>
+  <date>2019-10-19T18:12:56</date>
+  <millis>1571497976929</millis>
+  <sequence>3</sequence>
+  <logger>sun.applet.Main</logger>
+  <level>INFO</level>
+  <class>pegorov.lesson2.Server</class>
+  <method>sendlogInfo</method>
+  <thread>13</thread>
+  <message>Клиент уже есть в SQL базе! Pp</message>
+</record>
+<record>
+  <date>2019-10-19T18:12:56</date>
+  <millis>1571497976930</millis>
+  <sequence>4</sequence>
+  <logger>sun.applet.Main</logger>
+  <level>INFO</level>
+  <class>pegorov.lesson2.Server</class>
+  <method>sendlogInfo</method>
+  <thread>13</thread>
+  <message>В чате новый клиент! Pp</message>
+</record>
+<record>
+  <date>2019-10-19T18:12:58</date>
+  <millis>1571497978172</millis>
+  <sequence>5</sequence>
+  <logger>sun.applet.Main</logger>
+  <level>INFO</level>
+  <class>pegorov.lesson2.Server</class>
+  <method>sendlogInfo</method>
+  <thread>13</thread>
+  <message>Отправлено сообщение клиенту: Pp /name Pp</message>
+</record>
+<record>
+  <date>2019-10-19T18:12:58</date>
+  <millis>1571497978173</millis>
+  <sequence>6</sequence>
+  <logger>sun.applet.Main</logger>
+  <level>INFO</level>
+  <class>pegorov.lesson2.Server</class>
+  <method>sendlogInfo</method>
+  <thread>13</thread>
+  <message>Отправлено сообщение клиенту: Pp Добро пожаловать в чат! Pp</message>
+</record>
+<record>
+  <date>2019-10-19T18:12:58</date>
+  <millis>1571497978175</millis>
+  <sequence>7</sequence>
+  <logger>sun.applet.Main</logger>
+  <level>INFO</level>
+  <class>pegorov.lesson2.Server</class>
+  <method>sendlogInfo</method>
+  <thread>13</thread>
+  <message>Сообщение сервера: Добро пожаловать в чат! Pp</message>
+</record>
+<record>
+  <date>2019-10-19T18:12:58</date>
+  <millis>1571497978176</millis>
+  <sequence>8</sequence>
+  <logger>sun.applet.Main</logger>
+  <level>INFO</level>
+  <class>pegorov.lesson2.Server</class>
+  <method>sendlogInfo</method>
+  <thread>13</thread>
+  <message>Клиент добавлен в список. Имя нового клиента: Pp</message>
+</record>
+<record>
+  <date>2019-10-19T18:12:58</date>
+  <millis>1571497978181</millis>
+  <sequence>9</sequence>
+  <logger>sun.applet.Main</logger>
+  <level>INFO</level>
+  <class>pegorov.lesson2.Server</class>
+  <method>sendlogInfo</method>
+  <thread>12</thread>
+  <message>Создаем поток чтения сообщений от клиента: Pp</message>
+</record>
+<record>
+  <date>2019-10-19T18:13:00</date>
+  <millis>1571497980509</millis>
+  <sequence>10</sequence>
+  <logger>sun.applet.Main</logger>
+  <level>INFO</level>
+  <class>pegorov.lesson2.Server</class>
+  <method>sendlogInfo</method>
+  <thread>12</thread>
+  <message>Клиент: Pp написал сообщение: hi</message>
+</record>
+<record>
+  <date>2019-10-19T18:13:00</date>
+  <millis>1571497980509</millis>
+  <sequence>11</sequence>
+  <logger>sun.applet.Main</logger>
+  <level>INFO</level>
+  <class>pegorov.lesson2.Server</class>
+  <method>sendlogInfo</method>
+  <thread>12</thread>
+  <message>Отправлено сообщение клиенту: Pp Pp: hi</message>
+</record>
+<record>
+  <date>2019-10-19T18:13:05</date>
+  <millis>1571497985654</millis>
+  <sequence>12</sequence>
+  <logger>sun.applet.Main</logger>
+  <level>INFO</level>
+  <class>pegorov.lesson2.Server</class>
+  <method>sendlogInfo</method>
+  <thread>12</thread>
+  <message>Клиент: Pp написал сообщение: it's i</message>
+</record>
+<record>
+  <date>2019-10-19T18:13:05</date>
+  <millis>1571497985655</millis>
+  <sequence>13</sequence>
+  <logger>sun.applet.Main</logger>
+  <level>INFO</level>
+  <class>pegorov.lesson2.Server</class>
+  <method>sendlogInfo</method>
+  <thread>12</thread>
+  <message>Отправлено сообщение клиенту: Pp Pp: it's i</message>
+</record>
+<record>
+  <date>2019-10-19T18:13:25</date>
+  <millis>1571498005918</millis>
+  <sequence>14</sequence>
+  <logger>sun.applet.Main</logger>
+  <level>INFO</level>
+  <class>pegorov.lesson2.Server</class>
+  <method>sendlogInfo</method>
+  <thread>12</thread>
+  <message>Клиент: Pp написал сообщение: /end</message>
+</record>
+<record>
+  <date>2019-10-19T18:13:25</date>
+  <millis>1571498005921</millis>
+  <sequence>15</sequence>
+  <logger>sun.applet.Main</logger>
+  <level>INFO</level>
+  <class>pegorov.lesson2.Server</class>
+  <method>sendlogInfo</method>
+  <thread>12</thread>
+  <message>Клиент удален из чата! Pp</message>
+</record>
+<record>
+  <date>2019-10-19T18:13:25</date>
+  <millis>1571498005922</millis>
+  <sequence>16</sequence>
+  <logger>sun.applet.Main</logger>
+  <level>INFO</level>
+  <class>pegorov.lesson2.Server</class>
+  <method>sendlogInfo</method>
+  <thread>12</thread>
+  <message>Отправлено сообщение клиенту: Pp /end</message>
+</record>
+<record>
+  <date>2019-10-19T18:13:25</date>
+  <millis>1571498005923</millis>
+  <sequence>17</sequence>
+  <logger>sun.applet.Main</logger>
+  <level>INFO</level>
+  <class>pegorov.lesson2.Server</class>
+  <method>sendlogInfo</method>
+  <thread>12</thread>
+  <message>Pp отключился</message>
+</record>
+<record>
+  <date>2019-10-19T18:13:25</date>
+  <millis>1571498005924</millis>
+  <sequence>18</sequence>
+  <logger>sun.applet.Main</logger>
+  <level>INFO</level>
+  <class>pegorov.lesson2.Server</class>
+  <method>sendlogInfo</method>
+  <thread>1</thread>
+  <message>Клиента уже нет в чате! Pp</message>
+</record>
